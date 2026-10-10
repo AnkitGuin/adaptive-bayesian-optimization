@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "adaptive-bayesian-optimization"
+version = "1.0.0"
+description = "Adaptive Bayesian Optimization under Non-Stationary and Noisy Objectives"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Research Project" }]
+keywords = [
+    "bayesian-optimization",
+    "gaussian-processes",
+    "non-stationary",
+    "drift-detection",
+    "acquisition-functions",
+]
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "scikit-learn>=1.3",
+    "matplotlib>=3.8",
+    "pandas>=2.0",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[tool.setuptools]
+packages = [
+    "src",
+    "src.gp",
+    "src.acquisition",
+    "src.optimization",
+    "src.drift",
+    "src.benchmarks",
+    "src.evaluation",
+    "src.utils",
+    "experiments",
+    "analysis",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

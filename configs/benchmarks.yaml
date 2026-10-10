@@ -1,0 +1,53 @@
+# =============================================================================
+# Benchmark definitions (spec §7) and their scenario parameterisations (§25).
+# "from"/"to" map to ScenarioSpec.from_state / to_state.
+# =============================================================================
+
+peak:
+  description: "1D Gaussian peak, moving centre mu_t (Function B)"
+  peak_sigma: 0.12
+  start: 0.3
+  scenarios:
+    stationary: {type: stationary, start: 0.30}
+    slow: {type: slow, v: 0.006, start: 0.15}           # 0.15 -> 0.75 over 100 iter
+    abrupt: {type: abrupt, t_change: 40, from: 0.25, to: 0.75}
+    random_walk: {type: random_walk, sigma_drift: 0.008, start: 0.50}
+    noise_shift: {type: noise_shift, start: 0.50, noise_from: 0.02, noise_to: 0.15}
+
+peak2d:
+  description: "2D Gaussian peak, moving centre mu_t (Function D)"
+  peak_sigma: 0.15
+  start: [0.35, 0.35]
+  scenarios:
+    stationary: {type: stationary, start: [0.40, 0.40]}
+    slow: {type: slow, v: 0.004, start: [0.25, 0.25]}   # -> [0.65, 0.65] over 100
+    abrupt: {type: abrupt, t_change: 40, from: [0.30, 0.70], to: [0.70, 0.30]}
+    random_walk: {type: random_walk, sigma_drift: 0.006, start: [0.50, 0.50]}
+
+multimodal:
+  description: "1D three-peak landscape, time-varying amplitudes (Function C)"
+  centers: [0.2, 0.5, 0.8]
+  widths: [0.08, 0.08, 0.08]
+  scenarios:
+    stationary: {type: stationary}
+    switch: {type: switch, t_switch1: 35, t_switch2: 70, transition: 4}
+
+sinusoidal:
+  description: "1D sinusoid with drifting phase (Function A)"
+  start: 0.0
+  scenarios:
+    stationary: {type: stationary, start: 0.0}
+    slow: {type: slow, phase_speed: 0.06, start: 0.0}
+    random_walk: {type: random_walk, sigma_drift: 0.05, start: 0.0}
+
+process:
+  description: "3D process-efficiency simulator under degradation + demand cycle (spec §34)"
+  t0: 190.0
+  drift_per_step: 0.15
+  p_center: 2.6
+  p_osc: 0.8
+  period: 60
+  s_opt: 45.0
+  noise_std: 1.0
+  scenarios:
+    degradation: {type: slow, v: 0.0}   # drift is handled inside the simulator

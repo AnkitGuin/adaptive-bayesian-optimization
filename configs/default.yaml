@@ -1,0 +1,62 @@
+# =============================================================================
+# Central configuration (spec §43).  Experiment scripts read this file; all
+# per-study choices live in configs/experiments.yaml.
+# =============================================================================
+
+project:
+  name: adaptive-bayesian-optimization
+  title: "Adaptive Bayesian Optimization under Non-Stationary and Noisy Objectives"
+
+random:
+  base_seed: 20260923
+
+seeds:
+  count: 20          # main synthetic experiments (spec §31)
+  count_ablation: 10 # ablations / sweeps
+
+budget:
+  evaluations: 100   # total evaluations incl. initial design
+  n_initial_1d: 10
+  n_initial_2d3d: 16
+  # quick (smoke-test) overrides
+  quick:
+    evaluations: 40
+    n_initial_1d: 6
+    n_initial_2d3d: 8
+    seeds: 3
+
+gp:
+  kernel: matern52   # Matern 5/2 (spec §9); matern32 / rbf in sensitivity study
+  lengthscale_1d: 0.25
+  lengthscale_2d: 0.15
+  lengthscale_3d: 0.18
+  normalize: true
+  jitter: 1.0e-8
+
+acquisition:
+  ei: {xi: 0.01}
+  ucb: {beta_base: 2.0}
+  pi: {xi: 0.01}
+
+adaptive:
+  half_life: 32.0        # forgetting half-life in iterations (spec §18)
+  beta_high: 6.0         # exploration boost after drift (spec §20)
+  recovery_len: 20       # iterations of boosted exploration / memory
+  ph_delta: 0.5          # Page-Hinkley tolerance
+  ph_threshold: 25.0     # Page-Hinkley detection threshold
+  boost_forgetting: 2.0  # during recovery: half_life -> half_life / 2
+  ls_shrink: 0.5         # during recovery: lengthscale -> lengthscale * 0.5
+  weight_min: 1.0e-3
+
+noise:                   # observation noise std, relative to objective scale (spec §26)
+  low: 0.02
+  medium: 0.05
+  high: 0.15
+  very_high: 0.30
+
+analysis:
+  n_boot: 2000
+  recovery_tol_frac: 0.05
+  exploration_quantile: 0.5
+  figures:
+    dpi: 150
